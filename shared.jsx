@@ -89,6 +89,9 @@
         </a>
         <div className={`site-nav-links${open ? " mobile-open" : ""}`}>
           <a href="properties.html" className={isActive("properties") ? "active" : ""}>Properties</a>
+          <a href="services.html" className={isActive("services") ? "active" : ""}>Services</a>
+          <a href="neighborhoods.html" className={isActive("neighborhoods") ? "active" : ""}>Areas</a>
+          <a href="blog.html" className={isActive("blog") ? "active" : ""}>Blog</a>
           <a href="about.html" className={isActive("about") ? "active" : ""}>About</a>
           <a href="contact.html" className={isActive("contact") ? "active" : ""}>Contact</a>
         </div>
@@ -116,9 +119,11 @@
             <h4 className="foot-h">Quick Links</h4>
             <ul className="foot-list">
               <li><a href="properties.html">Properties</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="neighborhoods.html">Neighbourhoods</a></li>
+              <li><a href="blog.html">Blog</a></li>
               <li><a href="about.html">About Sophia</a></li>
               <li><a href="contact.html">Contact</a></li>
-              <li><a href="contact.html">Request a Valuation</a></li>
             </ul>
           </div>
           <div data-aos="fade-up" data-aos-delay="200">
@@ -221,7 +226,7 @@
               <span><Icon.Area /> {l.sqm} m²</span>
             </div>
             <div className="back-ctas">
-              <a href="contact.html" className="pill pill-green">Book a Viewing <Icon.Arrow /></a>
+              <a href={`property.html?id=${l.id}`} className="pill pill-green">View Details <Icon.Arrow /></a>
               <a href="https://wa.me/353877770000" className="pill pill-wa"><Icon.Whatsapp style={{ width: 14, height: 14 }} /> WhatsApp</a>
             </div>
           </div>

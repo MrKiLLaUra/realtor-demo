@@ -33,6 +33,9 @@
               </a>
               <div className="nav-links">
                 <a href="properties.html">Properties</a>
+                <a href="services.html">Services</a>
+                <a href="neighborhoods.html">Areas</a>
+                <a href="blog.html">Blog</a>
                 <a href="about.html">About</a>
                 <a href="contact.html">Contact</a>
               </div>
