@@ -15,7 +15,7 @@
 export const DEMO = {
   // The studio that built the demo — the only real link on the site.
   studioName: 'Limen Studios',
-  studioUrl: process.env.NEXT_PUBLIC_STUDIO_URL || 'https://limenstudios.com',
+  studioUrl: process.env.NEXT_PUBLIC_STUDIO_URL || 'https://www.limen-studios.com',
 
   // The fictional agency this demo portrays.
   brand: 'Limen Properties',
