@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
 import { DEMO } from '@/lib/demo'
+import { cn } from '@/lib/utils'
 
 const links = [
   { href: '/', label: 'Home' },
@@ -26,7 +27,21 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', h)
   }, [])
 
+  // Lock body scroll while the mobile menu is open.
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [open])
+
+  // Close the mobile menu whenever the route changes.
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
   return (
+    <>
     <header
       className="fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-200"
       style={{
@@ -103,41 +118,66 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu */}
-      {open && (
-        <div
-          className="md:hidden px-6 py-5 flex flex-col gap-1"
-          style={{ borderTop: '1px solid var(--border)', background: 'white' }}
-        >
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="px-4 py-3 rounded-xl text-sm font-medium transition-colors"
-              style={{
-                background: pathname === l.href ? 'var(--ink)' : 'transparent',
-                color: pathname === l.href ? 'white' : 'var(--ink-2)',
-              }}
-            >
-              {l.label}
-            </Link>
-          ))}
-          <div className="mt-4 pt-4 flex flex-col gap-3" style={{ borderTop: '1px solid var(--border)' }}>
-            <a href={`tel:${DEMO.phone.replace(/\s/g, '')}`} className="text-sm px-4 py-2" style={{ color: 'var(--ink-3)' }}>
-              {DEMO.phone}
-            </a>
-            <Link
-              href="/contact"
-              onClick={() => setOpen(false)}
-              className="px-4 py-3 text-sm font-bold text-white text-center rounded-xl"
-              style={{ background: 'var(--green)' }}
-            >
-              Book a Viewing
-            </Link>
-          </div>
-        </div>
-      )}
     </header>
+
+      {/* Mobile menu — full-screen slide-down */}
+      <div
+        className={cn(
+          'md:hidden fixed inset-0 z-40 flex flex-col pt-[102px] px-6 pb-8 transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]',
+          open ? 'translate-y-0 pointer-events-auto' : '-translate-y-full pointer-events-none'
+        )}
+        style={{ background: 'var(--bg)' }}
+        aria-hidden={!open}
+      >
+        <nav className="flex flex-col mt-2">
+          {links.map((l, i) => {
+            const active = l.href === '/' ? pathname === '/' : pathname.startsWith(l.href)
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  'flex items-center justify-between py-4 text-3xl font-bold tracking-tight transition-all duration-500',
+                  open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
+                )}
+                style={{
+                  color: active ? 'var(--green)' : 'var(--ink)',
+                  borderBottom: '1px solid var(--border)',
+                  transitionDelay: open ? `${120 + i * 60}ms` : '0ms',
+                }}
+              >
+                {l.label}
+                <ArrowUpRight size={22} style={{ color: active ? 'var(--green)' : 'var(--ink-3)' }} />
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div
+          className={cn(
+            'mt-auto flex flex-col gap-3 transition-all duration-500',
+            open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          )}
+          style={{ transitionDelay: open ? `${120 + links.length * 60 + 80}ms` : '0ms' }}
+        >
+          <Link
+            href="/contact"
+            onClick={() => setOpen(false)}
+            className="w-full py-4 text-center text-base font-bold text-white rounded-xl transition-opacity hover:opacity-90"
+            style={{ background: 'var(--green)' }}
+          >
+            Book a Viewing
+          </Link>
+          <a
+            href={`tel:${DEMO.phone.replace(/\s/g, '')}`}
+            className="w-full py-3 text-center text-sm font-medium rounded-xl"
+            style={{ border: '1.5px solid var(--border)', color: 'var(--ink-2)' }}
+          >
+            {DEMO.phone}
+          </a>
+        </div>
+      </div>
+    </>
   )
 }
